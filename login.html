@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Вход — GameHub</title>
+  <style>
+    :root {
+      --primary: #00d2ff;
+      --bg-dark: #1a1a2e;
+      --card-bg: #16213e;
+      --text: #ffffff;
+      --muted: #a0a0b0;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-dark);
+      color: var(--text);
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .auth-container {
+      background: var(--card-bg);
+      border: 1px solid #0f3460;
+      border-radius: 12px;
+      padding: 2.5rem;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 10px 30px rgba(0, 210, 255, 0.15);
+    }
+    h2 {
+      text-align: center;
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    input {
+      width: 100%;
+      padding: 12px;
+      background: #0f172a;
+      border: 1px solid #0f3460;
+      border-radius: 6px;
+      color: #fff;
+      box-sizing: border-box;
+      margin-bottom: 1rem;
+    }
+    input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: var(--primary);
+      color: #000;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.1s, background 0.2s;
+    }
+    button:hover {
+      background: #00a5cc;
+      transform: scale(1.02);
+    }
+    .links {
+      margin-top: 1.5rem;
+      text-align: center;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+    .links a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+    .message {
+      margin-bottom: 1rem;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+    .error { color: #ff5555; }
+    .success { color: #55ffaa; }
+  </style>
+</head>
+<body>
+  <div class="auth-container">
+    <h2>Вход</h2>
+    <!-- action="/login" — это путь на сервере, который реально обрабатывает вход -->
+    <form id="offlineLogin">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required placeholder="you@example.com" autocomplete="username">
+
+      <label for="password">Пароль</label>
+      <input type="password" id="password" name="password" required placeholder="••••••••" autocomplete="current-password" minlength="6">
+
+      <button type="submit">Войти</button>
+    </form>
+
+    <div class="links">
+      Нет аккаунта? <a href="register.html">Зарегистрироваться</a>
+    </div>
+  </div>
+
+<script>
+(function(){
+ const form=document.getElementById('offlineLogin');
+ if(!form) return;
+ form.addEventListener('submit',function(e){
+  e.preventDefault();
+  const email=document.getElementById('email').value.trim().toLowerCase();
+  const pass=document.getElementById('password').value;
+  const users=JSON.parse(localStorage.getItem('nt_offline_users')||'{}');
+  const user=users[email];
+  if(!user || user.password!==pass){alert('Неверный email или пароль. Аккаунт должен быть создан на этом телефоне.');return;}
+  localStorage.setItem('nt_offline_session',JSON.stringify({name:user.name,email:user.email}));
+  alert('Вход выполнен!');
+  location.href='profile.html';
+ });
+})();
+</script>
+
+</body>
+</html>

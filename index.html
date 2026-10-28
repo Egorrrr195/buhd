@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b1020">
+<title>Vrag Games — Мир игр</title>
+
+  <script src="offline-saves.js"></script>
+<style>
+  :root {
+    --bg: #07091c;
+    --surface: #10152e;
+    --surface-2: #171536;
+    --line: rgba(95, 82, 255, .42);
+    --text: #f3f6ff;
+    --muted: #b6c2df;
+    --cyan: #25e3f4;
+    --violet: #a04cff;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; color: var(--text);
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background:
+      radial-gradient(ellipse at 50% -15%, rgba(37,227,244,.14), transparent 42rem),
+      radial-gradient(ellipse at 100% 45%, rgba(160,76,255,.12), transparent 34rem),
+      var(--bg);
+    min-height: 100vh;
+  }
+  a { color: inherit; text-decoration: none; }
+  .wrap { width: min(1120px, calc(100% - 40px)); margin: 0 auto; }
+  header {
+    position: sticky; top: 0; z-index: 5;
+    background: rgba(5,7,23,.88); backdrop-filter: blur(18px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav { min-height: 78px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+  .brand { font-size: clamp(1.55rem, 4vw, 2rem); font-weight: 900; letter-spacing: .08em; background: linear-gradient(100deg, #22e6f5 5%, #598bff 48%, #dc31ed 95%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .navlinks { display: flex; align-items: center; gap: 10px; }
+  .navlinks a { color: var(--muted); font-weight: 650; padding: 10px 15px; border-radius: 12px; transition: .2s; }
+  .navlinks a:hover { color: var(--text); background: rgba(255,255,255,.06); }
+  .navlinks .register { color: #07121f; background: var(--cyan); }
+  .hero { text-align: center; padding: 86px 0 54px; }
+  .eyebrow { display: inline-flex; align-items: center; gap: 8px; color: var(--cyan); border: 1px solid rgba(37,227,244,.35); background: rgba(37,227,244,.08); border-radius: 999px; padding: 8px 13px; font-size: .8rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 14px var(--cyan); }
+  h1 { max-width: 850px; margin: 24px auto 18px; font-size: clamp(2.5rem, 7vw, 5.4rem); line-height: .99; letter-spacing: -.055em; }
+  h1 span { color: var(--cyan); }
+  .intro { max-width: 650px; margin: 0 auto; color: var(--muted); font-size: clamp(1rem, 2.5vw, 1.22rem); line-height: 1.75; }
+  .actions { margin-top: 28px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+  .btn { display: inline-flex; justify-content: center; align-items: center; padding: 13px 19px; border-radius: 14px; font-weight: 800; transition: transform .2s, border-color .2s; }
+  .btn:hover { transform: translateY(-2px); }
+  .btn-primary { color: #07121f; background: linear-gradient(105deg, #118bf5, #4d31fa 58%, #c51de9); box-shadow: 0 10px 30px rgba(37,227,244,.14); }
+  .btn-secondary { border: 1px solid var(--line); background: rgba(255,255,255,.035); }
+  .section-head { display: flex; justify-content: space-between; align-items: end; gap: 20px; margin: 18px 0 24px; }
+  h2 { font-size: clamp(1.8rem, 4vw, 2.7rem); margin: 0; letter-spacing: -.04em; }
+  .section-head p { color: var(--muted); margin: 0; }
+  .games { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 18px; padding-bottom: 70px; }
+  .game {
+    position: relative; overflow: hidden; min-height: 205px; padding: 25px;
+    border: 1px solid var(--line); border-radius: 23px;
+    background: linear-gradient(145deg, rgba(17,31,67,.96), rgba(13,13,43,.96));
+    box-shadow: 0 14px 40px rgba(0,0,0,.12);
+    display: flex; flex-direction: column; align-items: flex-start;
+    transition: transform .22s, border-color .22s, box-shadow .22s;
+  }
+  .game::after { content: ""; position: absolute; width: 180px; height: 180px; right: -70px; top: -80px; border-radius: 50%; background: var(--glow, rgba(32,215,243,.12)); filter: blur(2px); pointer-events: none; }
+  .game:hover { transform: translateY(-4px); border-color: rgba(37,227,244,.65); box-shadow: 0 20px 45px rgba(0,0,0,.22); }
+  .game-top { display: flex; width: 100%; justify-content: space-between; align-items: flex-start; gap: 14px; position: relative; z-index: 1; }
+  .icon { width: 52px; height: 52px; display: grid; place-items: center; border-radius: 16px; font-size: 1.55rem; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.08); flex: 0 0 auto; }
+  .tag { font-size: .72rem; font-weight: 800; letter-spacing: .04em; color: var(--cyan); background: rgba(37,227,244,.09); border: 1px solid rgba(37,227,244,.22); border-radius: 999px; padding: 7px 10px; }
+  .game h3 { position: relative; z-index: 1; font-size: clamp(1.15rem, 2.4vw, 1.45rem); line-height: 1.3; margin: 20px 0 8px; letter-spacing: -.025em; }
+  .game p { position: relative; z-index: 1; color: var(--muted); line-height: 1.65; margin: 0 0 18px; }
+  .game .play { position: relative; z-index: 1; margin-top: auto; padding-top: 8px; color: var(--cyan); font-weight: 800; }
+  .play span { display: inline-block; transition: transform .2s; }
+  .game:hover .play span { transform: translateX(5px); }
+  footer { border-top: 1px solid var(--line); padding: 25px 0 35px; color: #7f8aa5; text-align: center; font-size: .9rem; }
+  @media (max-width: 680px) {
+    .wrap { width: min(100% - 28px, 520px); }
+    .nav { min-height: 70px; gap: 12px; }
+    .brand { letter-spacing: .04em; }
+    .navlinks { gap: 2px; }
+    .navlinks a { padding: 9px 10px; font-size: .9rem; }
+    .hero { padding: 65px 0 42px; }
+    .section-head { display: block; }
+    .section-head p { margin-top: 8px; }
+    .games { grid-template-columns: 1fr; gap: 13px; padding-bottom: 45px; }
+    .game { min-height: 180px; padding: 21px; border-radius: 20px; }
+  }
+  @media (max-width: 390px) {
+    .brand { font-size: 1.25rem; }
+    .navlinks a { font-size: .82rem; padding: 8px; }
+    .hero { padding-top: 50px; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#" aria-label="Vrag Games — главная">Vrag Games</a>
+    <nav class="navlinks" aria-label="Основная навигация" id="navlinks">
+      <a href="login.html">Войти</a>
+      <a class="register" href="register.html">Регистрация</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <div class="eyebrow"><span class="dot"></span> Твоя игровая площадка</div>
+    <h1>Добро пожаловать<br>в <span>мир игр!</span></h1>
+    <p class="intro">Выбирай игру, начинай приключение и соревнуйся с друзьями. Здесь каждый найдёт что-то по душе.</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="#games">Выбрать игру&nbsp; ↓</a>
+      <a class="btn btn-secondary" href="#about">Что такое Vrag Games?</a>
+    </div>
+  </section>
+
+  <section id="games">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow" style="margin-bottom:13px">Подборка для тебя</div>
+        <h2>Популярные игры</h2>
+      </div>
+      <p>5 игр · Начни прямо сейчас</p>
+    </div>
+
+    <div class="games">
+      <a class="game" href="Симулятор прокрутки телефонных номеров.html" style="--glow:rgba(32,215,243,.14)">
+        <div class="game-top"><div class="icon">📱</div><span class="tag">Удача</span></div>
+        <h3>Симулятор прокрутки телефонных номеров</h3>
+        <p>Крути, собирай редкие номера и проверь, насколько ты удачлив.</p>
+        <div class="play">Играть <span>→</span></div>
+      </a>
+      <a class="game" href="Номерная Империя.html" style="--glow:rgba(255,110,143,.15)">
+        <div class="game-top"><div class="icon">📠</div><span class="tag">Удача</span></div>
+        <h3>Номерная Империя</h3>
+        <p>Открывай номера мира, охоться за редкими комбинациями, собирай гараж и стань легендой номерного рынка.</p>
+        <div class="play">Играть <span>→</span></div>
+      </a>
+      <a class="game" href="Симулятор президента.html" style="--glow:rgba(139,123,255,.17)">
+        <div class="game-top"><div class="icon">🏛</div><span class="tag">Стратегия</span></div>
+        <h3>Симулятор президента</h3>
+        <p>Принимай решения, управляй страной и создавай собственную историю.</p>
+        <div class="play">Играть <span>→</span></div>
+      </a>
+      <a class="game" href="Симулятор магазина 247.html" style="--glow:rgba(83,224,159,.14)">
+        <div class="game-top"><div class="icon">🛒</div><span class="tag">Экономика</span></div>
+        <h3>Симулятор магазина 24/7</h3>
+        <p>Закупай товары, продавай, нанимай сотрудников и расширяйся до империи миллиардера.</p>
+        <div class="play">Играть <span>→</span></div>
+      </a>
+      <a class="game" href="Симулятор перекупа.html" style="--glow:rgba(255,110,143,.15)">
+        <div class="game-top"><div class="icon">💸</div><span class="tag">Бизнес</span></div>
+        <h3>Симулятор перекупа</h3>
+        <p>Находи выгодные сделки, покупай дешевле и продавай дороже.</p>
+        <div class="play">Играть <span>→</span></div>
+      </a>
+      <a class="game" href="Симулятор АЗС.html" style="--glow:rgba(255,180,83,.15)">
+        <div class="game-top"><div class="icon">⛽️</div><span class="tag">Менеджмент</span></div>
+        <h3>Симулятор АЗС</h3>
+        <p>Развивай заправку, обслуживай клиентов и увеличивай прибыль.</p>
+        <div class="play">Играть <span>→</span></div>
+      </a>
+      <a class="game" href="Симулятор_разработчика_игр.html" style="--glow:rgba(255,110,143,.15)">
+        <div class="game-top"><div class="icon">👨‍💻</div><span class="tag">Удача</span></div>
+        <h3>Симулятор разработчика игр</h3>
+        <p>🎮 Создавай собственные игры, зарабатывай деньги, прокачивай студию и собирай фанатов! 🚀 Пройди путь от новичка до легенды игровой индустрии!</p>
+        <div class="play">Играть <span>→</span></div>
+      </a>
+      <article class="game" id="about" style="--glow:rgba(139,123,255,.12)">
+        <div class="game-top"><div class="icon">✨</div><span class="tag">VragGames</span></div>
+        <h3>Играй в своём стиле</h3>
+        <p>Короткие игровые сессии, новые цели и возможность возвращаться за новым рекордом.</p>
+        <div class="play">Твоя следующая история начинается здесь</div>
+      </article>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap">© <span id="year"></span> Vrag Games · Создано для любителей игр</div></footer>
+<div id="notice" role="status" aria-live="polite" style="position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#111b3a;border:1px solid rgba(37,227,244,.45);color:#f5f7ff;padding:13px 18px;border-radius:14px;box-shadow:0 12px 35px #0005;max-width:calc(100% - 28px);text-align:center;transition:.25s;z-index:10"></div>
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+  try {
+    const session = JSON.parse(localStorage.getItem('nt_offline_session') || 'null');
+    if (session && session.email) {
+      document.getElementById('navlinks').innerHTML =
+        '<a href="profile.html">Профиль · ' +
+        String(session.name || 'Игрок').replace(/[&<>"]/g, '') +
+        '</a><a class="register" href="profile.html">Мой аккаунт</a>';
+    }
+  } catch (e) {}
+  let noticeTimer;
+  function showNotice(message) {
+    const notice = document.getElementById('notice');
+    notice.textContent = message;
+    notice.style.opacity = '1';
+    notice.style.transform = 'translate(-50%,0)';
+    clearTimeout(noticeTimer);
+    noticeTimer = setTimeout(() => {
+      notice.style.opacity = '0';
+      notice.style.transform = 'translate(-50%,20px)';
+    }, 2800);
+  }
+  function openGame(event, name) {
+    event.preventDefault();
+    showNotice('«' + name + '» — добавь сюда ссылку на страницу игры.');
+  }
+</script>
+</body>
+</html>

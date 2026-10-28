@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#07091c">
+<title>Профиль игрока — GameHub</title>
+<style>
+:root{--bg:#07091c;--surface:#10152e;--surface2:#171536;--line:rgba(95,82,255,.42);--text:#f3f6ff;--muted:#b6c2df;--cyan:#25e3f4;--violet:#a04cff}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:radial-gradient(ellipse at 15% 0%,rgba(37,227,244,.13),transparent 34rem),radial-gradient(ellipse at 100% 35%,rgba(160,76,255,.13),transparent 32rem),var(--bg)}
+a{color:inherit;text-decoration:none}button,input{font:inherit}.wrap{width:min(1050px,calc(100% - 32px));margin:auto}
+header{border-bottom:1px solid var(--line);background:#050717d9;backdrop-filter:blur(16px)}.nav{min-height:72px;display:flex;justify-content:space-between;align-items:center;gap:12px}.brand{font-weight:950;letter-spacing:.08em;font-size:1.45rem;background:linear-gradient(100deg,#22e6f5,#598bff,#dc31ed);background-clip:text;color:transparent}
+.btn{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--line);border-radius:12px;padding:10px 14px;background:#ffffff08;color:var(--text);font-weight:750;cursor:pointer}.primary{border:0;color:#07121f;background:linear-gradient(105deg,#25e3f4,#7d5cff)}.danger{border-color:#ff657755;color:#ff9ca8}
+main{padding:34px 0 50px}.eyebrow{color:var(--cyan);font-size:.76rem;font-weight:850;letter-spacing:.14em;text-transform:uppercase}.hero{display:grid;grid-template-columns:auto 1fr auto;gap:22px;align-items:center;padding:28px;border:1px solid var(--line);border-radius:25px;background:linear-gradient(115deg,#25e3f414,#a04cff16),var(--surface);box-shadow:0 22px 60px #0003}
+.avatar{width:100px;height:100px;display:grid;place-items:center;border-radius:25px;background:linear-gradient(135deg,#118bf5,#a04cff);font-size:3rem;border:2px solid #ffffff25}.name{font-size:clamp(1.8rem,5vw,2.7rem);font-weight:900;letter-spacing:-.04em;margin:6px 0}.email{color:var(--muted);overflow-wrap:anywhere}.badge{display:inline-block;margin-top:12px;padding:6px 9px;border-radius:8px;background:#25e3f41b;color:var(--cyan);font-size:.78rem;font-weight:800}.level{min-width:145px;padding:15px;border:1px solid var(--line);border-radius:17px;background:#07091c66}.level strong{display:block;font-size:2rem;margin:4px 0}.muted{color:var(--muted);font-size:.84rem}.bar{height:7px;background:#ffffff15;border-radius:99px;overflow:hidden;margin-top:10px}.bar span{display:block;width:12%;height:100%;background:linear-gradient(90deg,#25e3f4,#a04cff)}
+.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:17px;margin-top:17px}.panel{padding:22px;border:1px solid var(--line);border-radius:21px;background:var(--surface)}h2{font-size:1.1rem;margin:0 0 18px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat{padding:15px;border-radius:14px;background:var(--surface2);border:1px solid #ffffff08}.stat span{display:block;color:var(--muted);font-size:.78rem}.stat strong{display:block;font-size:1.55rem;margin-top:8px}.game-list{display:grid;gap:10px}.game{display:flex;align-items:center;gap:12px;padding:13px;border-radius:14px;background:var(--surface2)}.icon{width:43px;height:43px;display:grid;place-items:center;background:#25e3f41b;border-radius:12px;font-size:1.4rem}.game strong{display:block}.game small{display:block;color:var(--muted);margin-top:4px}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.field{margin:12px 0}.field label{display:block;font-size:.82rem;color:var(--muted);margin-bottom:7px}.field input{width:100%;padding:12px;border-radius:11px;background:#07091c;border:1px solid var(--line);color:var(--text);outline:none}.field input:focus{border-color:var(--cyan)}.hidden{display:none!important}.footer{text-align:center;color:#7783a8;font-size:.8rem;padding:0 0 25px}.note{color:var(--muted);font-size:.86rem;line-height:1.6}.top-actions{display:flex;gap:8px;flex-wrap:wrap}
+@media(max-width:700px){.hero{grid-template-columns:auto 1fr;padding:20px;gap:15px}.avatar{width:76px;height:76px;font-size:2.4rem;border-radius:20px}.level{grid-column:1/-1}.grid{grid-template-columns:1fr}.panel{padding:18px}.stats{grid-template-columns:repeat(3,1fr)}.stat{padding:11px}.stat strong{font-size:1.3rem}}
+@media(max-width:420px){.nav{padding:12px 0;align-items:flex-start;flex-direction:column}.top-actions{width:100%}.top-actions .btn{flex:1}.hero{grid-template-columns:1fr;text-align:center;justify-items:center}.level{width:100%;text-align:left}.stats{gap:6px}.stat span{font-size:.7rem}}
+</style>
+</head>
+<body>
+<header><div class="wrap nav"><a class="brand" href="index.html">GAMEHUB</a><div class="top-actions"><a class="btn" href="index.html">← К играм</a><button class="btn danger" id="logoutBtn">Выйти</button></div></div></header>
+<main class="wrap">
+<section class="hero">
+  <div class="avatar" id="avatar">🎮</div>
+  <div><div class="eyebrow">АККАУНТ ИГРОКА</div><div class="name" id="playerName">Игрок</div><div class="email" id="playerEmail">email@example.com</div><span class="badge">✦ Участник GameHub</span></div>
+  <div class="level"><div class="eyebrow">УРОВЕНЬ</div><strong>1</strong><div class="muted">Начало приключения</div><div class="bar"><span></span></div></div>
+</section>
+<div class="grid">
+  <section class="panel"><h2>📊 Моя статистика</h2><div class="stats">
+    <div class="stat"><span>🎮 Игр в хабе</span><strong>5</strong></div>
+    <div class="stat"><span>🏆 Достижения</span><strong>0</strong></div>
+    <div class="stat"><span>🔥 Серия входов</span><strong>1</strong></div>
+  </div><p class="note" style="margin-bottom:0">Статистика профиля пока демонстрационная. Её можно связать с сохранениями игр, чтобы показывать реальные достижения и прогресс.</p>
+  <div class="actions"><a class="btn primary" href="index.html#games">🎮 Выбрать игру</a><button class="btn" id="editBtn">✏️ Изменить имя</button></div>
+  <form id="editForm" class="hidden" style="margin-top:18px"><div class="field"><label for="nameInput">Отображаемое имя</label><input id="nameInput" maxlength="32" required></div><div class="field"><label for="avatarInput">Аватар (эмодзи)</label><input id="avatarInput" maxlength="6" placeholder="🎮"></div><button class="btn primary" type="submit">Сохранить профиль</button></form>
+  </section>
+  <section class="panel"><h2>🕹️ Игры GameHub</h2><div class="game-list">
+    <a class="game" href="game-1.html"><div class="icon">📱</div><div><strong>Симулятор прокрутки номеров</strong><small>Удача и коллекционирование</small></div></a>
+    <a class="game" href="game-2.html"><div class="icon">🏛️</div><div><strong>Симулятор президента</strong><small>Стратегия и управление</small></div></a>
+    <a class="game" href="game-3.html"><div class="icon">🛒</div><div><strong>Симулятор магазина</strong><small>Экономика и развитие</small></div></a>
+    <a class="game" href="game-4.html"><div class="icon">⛽</div><div><strong>Симулятор АЗС</strong><small>Менеджмент</small></div></a>
+    <a class="game" href="game-5.html"><div class="icon">💸</div><div><strong>Симулятор перекупа</strong><small>Торговля и сделки</small></div></a>
+  </div></section>
+</div>
+</main><div class="footer">GAMEHUB · Твой игровой профиль</div>
+<script>
+(function(){
+  let session;
+  try { session = JSON.parse(localStorage.getItem('nt_offline_session') || 'null'); } catch(e) {}
+  if (!session || !session.email) { location.replace('login.html'); return; }
+  const usersKey='nt_offline_users';
+  let users={};
+  try { users=JSON.parse(localStorage.getItem(usersKey)||'{}'); } catch(e) {}
+  const email=String(session.email).toLowerCase();
+  const user=users[email] || {name:session.name || 'Игрок',email:email};
+  const nameEl=document.getElementById('playerName');
+  const emailEl=document.getElementById('playerEmail');
+  const avatarEl=document.getElementById('avatar');
+  nameEl.textContent=user.name || session.name || 'Игрок';
+  emailEl.textContent=email;
+  avatarEl.textContent=user.avatar || '🎮';
+  const form=document.getElementById('editForm');
+  document.getElementById('editBtn').addEventListener('click',()=>{
+    form.classList.toggle('hidden');
+    document.getElementById('nameInput').value=nameEl.textContent;
+    document.getElementById('avatarInput').value=avatarEl.textContent;
+  });
+  form.addEventListener('submit',(e)=>{
+    e.preventDefault();
+    const newName=document.getElementById('nameInput').value.trim() || 'Игрок';
+    const newAvatar=document.getElementById('avatarInput').value.trim() || '🎮';
+    if(!users[email]) users[email]={name:newName,email:email};
+    users[email].name=newName;
+    users[email].avatar=newAvatar;
+    try {
+      localStorage.setItem(usersKey,JSON.stringify(users));
+      localStorage.setItem('nt_offline_session',JSON.stringify({name:newName,email:email}));
+    } catch(err) {}
+    nameEl.textContent=newName; avatarEl.textContent=newAvatar;
+    form.classList.add('hidden');
+    alert('Профиль сохранён!');
+  });
+  document.getElementById('logoutBtn').addEventListener('click',()=>{
+    localStorage.removeItem('nt_offline_session');
+    location.href='index.html';
+  });
+})();
+</script>
+</body></html>
